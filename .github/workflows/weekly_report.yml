@@ -17,13 +17,15 @@ jobs:
         run: |
           # JSTでの日付を取得
           echo "DATE=$(TZ=Asia/Tokyo date '+%Y/%m/%d')" >> $GITHUB_ENV
+          # リポジトリのオーナーを取得
+          echo "OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)" >> $GITHUB_ENV
 
       - name: Create GitHub Issue
         run: |
           gh issue create \
             --repo ${{ github.repository }} \
             --title "[週報] ${{ env.DATE }}" \
-            --assignee harunonsystem \
+            --assignee ${{ env.OWNER }} \
             --label weekly-report \
             --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})'
         env:
