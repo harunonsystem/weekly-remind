@@ -13,7 +13,8 @@ on:
 ```
 
 ### 必要な権限
-
+Repository Settnigs > Actions > General から Workflow permissons `Read and write permissions
+`に設定してください。
 ```yaml
 permissions:
   contents: write      # リポジトリへのpush権限
