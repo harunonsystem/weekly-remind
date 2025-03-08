@@ -61,12 +61,14 @@ jobs:
 
       - name: Add Suggestion Comment
         run: |
-          SUGGESTED_LINE="[x] ${{ env.DATE }}"
+          # ファイルの最後の行を取得
+          LAST_LINE=$(tail -n 1 RECORD.md)
           
-          gh pr comment ${{ steps.create-pr.outputs.pr_number }} --body "週報完了時は以下の提案を適用してください：
+          gh pr review ${{ steps.create-pr.outputs.pr_number }} --request-changes --body "週報完了時は以下の提案を適用してください：
 
-          \`\`\`suggestion
-          ${SUGGESTED_LINE}
-          \`\`\`"
+\`\`\`suggestion:-0 +1
+${LAST_LINE}
+[x] ${{ env.DATE }}
+\`\`\`"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
