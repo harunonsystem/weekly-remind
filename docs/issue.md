@@ -5,7 +5,8 @@
 ファイル: `.github/workflows/weekly_report_issue.yml`
 
 ### スケジュール設定
-
+デフォルトはworkflow_dispatch（手動実行）です
+on scheduleの値を適宜変更してお使いください
 ```yaml
 on:
   schedule:

@@ -30,7 +30,7 @@ permissions:
 2. リポジトリをチェックアウト
 3. 新しいブランチを作成（`weekly-report/YYYYMMDD`形式）
 4. `RECORD.md`に新しい日付を追加
-   - 形式: `[] YYYY/MM/DD`
+   - 形式: `[x] YYYY/MM/DD`（週報完了としてマーク）
 5. 変更をコミット
 6. Pull Requestを作成
    - タイトル: `週報: YYYY/MM/DD`
@@ -58,10 +58,15 @@ jobs:
 --body "# 今週の週報記録\n\n週報の記録を追加します。\n\n[週報ページへ](${{ secrets.WEEKLY_PAGE_URL }})"
 ```
 
-### RECORD.mdの記録形式変更
+### RECORD.mdの記録形式
 
 `.github/workflows/weekly_report_pr.yml`の`Update RECORD.md`ステップで編集します：
 
 ```yaml
-echo "[] ${{ env.DATE }}" >> RECORD.md  # 記録形式を変更
-``` 
+echo "[x] ${{ env.DATE }}" >> RECORD.md  # 週報完了としてマーク
+```
+
+記録は最初から完了状態（`[x]`）としてマークされます。これにより：
+- 週報の記録がシンプルに
+- マージ後の追加の更新が不要
+- 履歴が明確に管理可能 

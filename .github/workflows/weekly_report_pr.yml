@@ -35,7 +35,7 @@ jobs:
       - name: Update RECORD.md
         run: |
           echo "" >> RECORD.md  # 空行を追加
-          echo "[] ${{ env.DATE }}" >> RECORD.md
+          echo "[x] ${{ env.DATE }}" >> RECORD.md
 
       - name: Create Pull Request
         id: create-pr
@@ -53,26 +53,6 @@ jobs:
             --body $'# 今週の週報記録\r\n\r\n週報の記録を追加します。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
             --label weekly-report \
             --reviewer $OWNER)
-          
-          PR_NUMBER=$(echo $PR_URL | grep -oE '[0-9]+$')
-          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add Suggestion Comment
-        run: |
-          # ファイルの最後の行を取得
-          LAST_LINE=$(tail -n 1 RECORD.md)
-          
-          # レビューコメントを作成して送信
-          echo "週報完了時は以下の提案を適用してください：" > review.txt
-          echo "" >> review.txt
-          echo "\`\`\`suggestion" >> review.txt
-          echo "${LAST_LINE}" >> review.txt
-          echo "[x] ${{ env.DATE }}" >> review.txt
-          echo "\`\`\`" >> review.txt
-          
-          # レビューを送信
-          gh pr review ${{ steps.create-pr.outputs.pr_number }} --comment --body-file review.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

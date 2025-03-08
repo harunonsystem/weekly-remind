@@ -16,9 +16,10 @@ Issue版:
 - [詳細設定](docs/issue.md)
 
 Pull Request版:
-- `RECORD.md`に日付を自動追加
+- `RECORD.md`に完了済みの日付を自動追加
 - GitHubのPull Requestとして記録を管理
 - マージによる記録の履歴管理
+- シンプルな記録形式（`[x] YYYY/MM/DD`）
 - [詳細設定](docs/pull-request.md)
 
 ## 基本セットアップ
