@@ -43,9 +43,13 @@ jobs:
           git commit -m "週報記録: ${{ env.DATE }}"
           git push origin "${{ env.BRANCH_NAME }}/${{ env.BRANCH_DATE }}"
           
+          # リポジトリのオーナーを取得
+          OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)
+          
           gh pr create \
             --title "週報: ${{ env.DATE }}" \
             --body $'# 今週の週報記録\r\n\r\n週報の記録を追加します。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
-            --label weekly-report
+            --label weekly-report \
+            --reviewer $OWNER
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
