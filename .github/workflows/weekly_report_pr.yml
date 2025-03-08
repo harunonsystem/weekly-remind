@@ -7,7 +7,6 @@ on:
 permissions:
   contents: write      # リポジトリへのpush権限
   pull-requests: write # PR作成権限
-  workflows: write     # GitHub Actionsからのワークフロー実行権限
 
 jobs:
   create_pr:
@@ -16,8 +15,6 @@ jobs:
       BRANCH_NAME: weekly-report  # PRのブランチ名のベース
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # プッシュ権限のためのトークン
 
       - name: Setup Git
         run: |
