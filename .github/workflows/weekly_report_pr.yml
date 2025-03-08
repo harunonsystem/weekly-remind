@@ -1,8 +1,8 @@
 name: Create Weekly Report PR
 on:
-  workflow_dispatch:  # 手動実行用(debug)
-  # schedule:
-    # - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
+  # workflow_dispatch:  # 手動実行用(debug)
+  schedule:
+    - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
 
 permissions:
   contents: write      # リポジトリへのpush権限
@@ -26,7 +26,7 @@ jobs:
         run: |
           # JSTでの日付を取得
           echo "DATE=$(TZ=Asia/Tokyo date '+%Y/%m/%d')" >> $GITHUB_ENV
-          echo "BRANCH_DATE=$(TZ=Asia/Tokyo date '+%Y%m%d%H%M')" >> $GITHUB_ENV
+          echo "BRANCH_DATE=$(TZ=Asia/Tokyo date '+%Y%m%d')" >> $GITHUB_ENV
 
       - name: Create Branch
         run: |
