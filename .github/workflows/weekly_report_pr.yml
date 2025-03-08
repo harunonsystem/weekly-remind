@@ -64,11 +64,15 @@ jobs:
           # ファイルの最後の行を取得
           LAST_LINE=$(tail -n 1 RECORD.md)
           
-          gh pr review ${{ steps.create-pr.outputs.pr_number }} --request-changes --body $'週報完了時は以下の提案を適用してください：
-
-```suggestion:-0 +1
-'"${LAST_LINE}"'
-[x] '"${{ env.DATE }}"'
-```'
+          # レビューコメントを作成して送信
+          echo "週報完了時は以下の提案を適用してください：" > review.txt
+          echo "" >> review.txt
+          echo "\`\`\`suggestion:-0 +1" >> review.txt
+          echo "${LAST_LINE}" >> review.txt
+          echo "[x] ${{ env.DATE }}" >> review.txt
+          echo "\`\`\`" >> review.txt
+          
+          # レビューを送信
+          gh pr review ${{ steps.create-pr.outputs.pr_number }} --request-changes --body-file review.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
