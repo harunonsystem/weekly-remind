@@ -5,8 +5,9 @@ on:
     # - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
 
 permissions:
-  contents: write  # リポジトリへのpush権限
-  pull-requests: write  # PR作成権限
+  contents: write      # リポジトリへのpush権限
+  pull-requests: write # PR作成権限
+  workflows: write     # GitHub Actionsからのワークフロー実行権限
 
 jobs:
   create_pr:
