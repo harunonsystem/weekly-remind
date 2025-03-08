@@ -38,6 +38,7 @@ jobs:
           echo "[] ${{ env.DATE }}" >> RECORD.md
 
       - name: Create Pull Request
+        id: create-pr
         run: |
           git add RECORD.md
           git commit -m "週報記録: ${{ env.DATE }}"
@@ -46,10 +47,26 @@ jobs:
           # リポジトリのオーナーを取得
           OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)
           
-          gh pr create \
+          # PRを作成し、番号を環境変数として出力
+          PR_URL=$(gh pr create \
             --title "週報: ${{ env.DATE }}" \
             --body $'# 今週の週報記録\r\n\r\n週報の記録を追加します。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
             --label weekly-report \
-            --reviewer $OWNER
+            --reviewer $OWNER)
+          
+          PR_NUMBER=$(echo $PR_URL | grep -oE '[0-9]+$')
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add Suggestion Comment
+        run: |
+          SUGGESTED_LINE="[x] ${{ env.DATE }}"
+          
+          gh pr comment ${{ steps.create-pr.outputs.pr_number }} --body "週報完了時は以下の提案を適用してください：
+
+          \`\`\`suggestion
+          ${SUGGESTED_LINE}
+          \`\`\`"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
