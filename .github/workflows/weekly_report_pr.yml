@@ -34,6 +34,7 @@ jobs:
 
       - name: Update RECORD.md
         run: |
+          echo "" >> RECORD.md  # 空行を追加
           echo "[] ${{ env.DATE }}" >> RECORD.md
 
       - name: Create Pull Request
@@ -44,7 +45,7 @@ jobs:
           
           gh pr create \
             --title "週報: ${{ env.DATE }}" \
-            --body "# 今週の週報記録\n\n週報の記録を追加します。\n\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})" \
+            --body $'# 今週の週報記録\r\n\r\n週報の記録を追加します。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
             --label weekly-report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

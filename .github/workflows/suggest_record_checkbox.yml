@@ -1,33 +1,42 @@
 name: Suggest Record Checkbox
 on:
-  pull_request:
-    types: [opened]
-    branches: 
-      - main
-    paths:
-      - 'RECORD.md'
+  workflow_run:
+    workflows: ["Create Weekly Report PR"]
+    types:
+      - completed
 
 jobs:
   add-suggestion:
-    if: startsWith(github.head_ref, 'weekly-report/')
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'weekly-report/')
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write  # PRへのコメント権限
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 差分を取得するために必要
+          fetch-depth: 0
+
+      - name: Get PR number
+        id: pr
+        run: |
+          PR_NUMBER=$(gh pr list --head ${{ github.event.workflow_run.head_branch }} --json number --jq '.[0].number')
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Find added date and create suggestion
+        if: steps.pr.outputs.number != ''
         run: |
           # PRの差分から追加された行を取得
-          ADDED_LINE=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} RECORD.md | grep '^\+.*\[\]' | sed 's/^\+//')
+          ADDED_LINE=$(git diff origin/main...HEAD RECORD.md | grep '^\+.*\[\]' | sed 's/^\+//')
           if [ ! -z "$ADDED_LINE" ]; then
             # []を[x]に置換した行を作成
             SUGGESTED_LINE=$(echo "$ADDED_LINE" | sed 's/\[\]/\[x\]/')
             # コメントを作成
-            gh pr comment ${{ github.event.pull_request.number }} --body "週報完了時は以下の提案を適用してください：
+            gh pr comment ${{ steps.pr.outputs.number }} --body "週報完了時は以下の提案を適用してください：
 
             \`\`\`suggestion
             ${SUGGESTED_LINE}
