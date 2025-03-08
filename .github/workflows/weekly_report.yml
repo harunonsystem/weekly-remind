@@ -4,6 +4,9 @@ on:
 #   schedule:
 #     - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
 
+permissions:
+  issues: write
+
 jobs:
   create_issue:
     runs-on: ubuntu-latest
