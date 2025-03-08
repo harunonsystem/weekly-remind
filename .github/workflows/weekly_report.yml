@@ -25,6 +25,6 @@ jobs:
             --title "[週報] ${{ env.DATE }}" \
             --assignee harunonsystem \
             --label weekly-report \
-            --body "# 今週の週報\n\n- 記入したらこのIssueを閉じてください\n\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})"
+            --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
