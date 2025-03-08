@@ -67,7 +67,7 @@ jobs:
           # レビューコメントを作成して送信
           echo "週報完了時は以下の提案を適用してください：" > review.txt
           echo "" >> review.txt
-          echo "\`\`\`suggestion:-0 +1" >> review.txt
+          echo "\`\`\`suggestion" >> review.txt
           echo "${LAST_LINE}" >> review.txt
           echo "[x] ${{ env.DATE }}" >> review.txt
           echo "\`\`\`" >> review.txt
