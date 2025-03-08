@@ -1,0 +1,26 @@
+name: Create Weekly Report Issue
+on:
+  workflow_dispatch:  # 手動実行用
+#   schedule:
+#     - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
+
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: |
+          # JSTでの日付を取得
+          echo "DATE=$(TZ=Asia/Tokyo date '+%Y/%m/%d')" >> $GITHUB_ENV
+
+      - name: Create GitHub Issue
+        run: |
+          gh issue create \
+            --repo ${{ github.repository }} \
+            --title "[週報] ${{ env.DATE }}" \
+            --assignee harunonsystem \
+            --label weekly-report \
+            --body "## 今週の週報\n- 記入したらこのIssueを閉じてください\n\n週報ページ: ${{ secrets.WEEKLY_PAGE_URL }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
