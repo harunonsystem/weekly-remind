@@ -39,4 +39,9 @@ Pull Request版:
 ## 注意事項
 
 - GitHub Actionsの実行時間はUTCベースです（JST-9時間）
-- Issue版とPull Request版は同時に有効にすることも可能ですが、通常は片方のみを使用することを推奨します 
+- Issue版とPull Request版は同時に有効にすることも可能ですが、通常は片方のみを使用することを推奨します
+
+## あとがき
+
+> [!NOTE] 
+> 週報をNotionで記録してるがどんなReminderを使っても忘れてしまう。せや、Pull Request発行される形にしたらArc Browserのタブとして一生でてくるから絶対見るやん？と思って作りました。
