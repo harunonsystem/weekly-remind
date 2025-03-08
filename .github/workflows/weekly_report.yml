@@ -11,6 +11,8 @@ permissions:
 jobs:
   create_issue:
     runs-on: ubuntu-latest
+    env:
+      ISSUE_LABEL: weekly-report  # デフォルトのラベル名
     steps:
       - name: Get current date
         id: date
@@ -26,7 +28,7 @@ jobs:
             --repo ${{ github.repository }} \
             --title "[週報] ${{ env.DATE }}" \
             --assignee ${{ env.OWNER }} \
-            --label weekly-report \
-            --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})'
+            --label ${{ env.ISSUE_LABEL }} \
+            --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報ページへ](${{ secrets.WEEKLY_PAGE_URL }})'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

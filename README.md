@@ -7,6 +7,7 @@
 - 毎週金曜日22:00（JST）に週報用Issueを自動作成
 - 週報ページへのリンクをIssue内に自動追加
 - リポジトリオーナーへの自動アサイン
+- カスタマイズ可能なIssueラベル
 
 ## セットアップ
 
@@ -20,7 +21,8 @@
 
 以下のラベルを作成してください：
 
-- `weekly-report`: 週報用Issue用のラベル
+- デフォルトでは`weekly-report`ラベルが使用されます
+- 別のラベルを使用する場合は、`.github/workflows/weekly_report.yml`の`ISSUE_LABEL`環境変数を変更してください
 
 ### 3. GitHub Actionsの設定
 
@@ -36,6 +38,19 @@ on:
 ### 4. アサイン先について
 
 Issueは自動的にリポジトリのオーナーにアサインされます。
+
+## カスタマイズ
+
+### ラベルの変更
+
+`.github/workflows/weekly_report.yml`の`env`セクションで設定できます：
+
+```yaml
+jobs:
+  create_issue:
+    env:
+      ISSUE_LABEL: your-custom-label  # ラベル名を変更
+```
 
 ## 動作確認方法
 
