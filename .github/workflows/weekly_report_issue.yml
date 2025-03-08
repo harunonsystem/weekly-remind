@@ -1,8 +1,8 @@
 name: Create Weekly Report Issue
 on:
-#   workflow_dispatch:  # 手動実行用(debug)
-  schedule:
-    - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
+  workflow_dispatch:  # 手動実行用(debug)
+#   schedule:
+#     - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
 
 permissions:
   contents: read
@@ -29,6 +29,6 @@ jobs:
             --title "[週報] ${{ env.DATE }}" \
             --assignee ${{ env.OWNER }} \
             --label ${{ env.ISSUE_LABEL }} \
-            --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報ページへ](${{ secrets.WEEKLY_PAGE_URL }})'
+            --body $'# 今週の週報\r\n\r\n- 記入したらこのIssueを閉じてください\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

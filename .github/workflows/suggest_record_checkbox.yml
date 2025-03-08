@@ -1,0 +1,37 @@
+name: Suggest Record Checkbox
+on:
+  pull_request:
+    types: [opened]
+    branches: 
+      - main
+    paths:
+      - 'RECORD.md'
+
+jobs:
+  add-suggestion:
+    if: startsWith(github.head_ref, 'weekly-report/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write  # PRへのコメント権限
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 差分を取得するために必要
+
+      - name: Find added date and create suggestion
+        run: |
+          # PRの差分から追加された行を取得
+          ADDED_LINE=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} RECORD.md | grep '^\+.*\[\]' | sed 's/^\+//')
+          if [ ! -z "$ADDED_LINE" ]; then
+            # []を[x]に置換した行を作成
+            SUGGESTED_LINE=$(echo "$ADDED_LINE" | sed 's/\[\]/\[x\]/')
+            # コメントを作成
+            gh pr comment ${{ github.event.pull_request.number }} --body "週報完了時は以下の提案を適用してください：
+
+            \`\`\`suggestion
+            ${SUGGESTED_LINE}
+            \`\`\`"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

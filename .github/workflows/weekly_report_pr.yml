@@ -1,0 +1,52 @@
+name: Create Weekly Report PR
+on:
+  workflow_dispatch:  # 手動実行用(debug)
+  # schedule:
+    # - cron: '0 13 * * 5'  # 毎週金曜22:00 JST（GitHub ActionsはUTCなのでJST-9）
+
+permissions:
+  contents: write  # リポジトリへのpush権限
+  pull-requests: write  # PR作成権限
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: weekly-report  # PRのブランチ名のベース
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # プッシュ権限のためのトークン
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Get current date
+        id: date
+        run: |
+          # JSTでの日付を取得
+          echo "DATE=$(TZ=Asia/Tokyo date '+%Y/%m/%d')" >> $GITHUB_ENV
+          echo "BRANCH_DATE=$(TZ=Asia/Tokyo date '+%Y%m%d%H%M')" >> $GITHUB_ENV
+
+      - name: Create Branch
+        run: |
+          git checkout -b "${{ env.BRANCH_NAME }}/${{ env.BRANCH_DATE }}"
+
+      - name: Update RECORD.md
+        run: |
+          echo "[] ${{ env.DATE }}" >> RECORD.md
+
+      - name: Create Pull Request
+        run: |
+          git add RECORD.md
+          git commit -m "週報記録: ${{ env.DATE }}"
+          git push origin "${{ env.BRANCH_NAME }}/${{ env.BRANCH_DATE }}"
+          
+          gh pr create \
+            --title "週報: ${{ env.DATE }}" \
+            --body "# 今週の週報記録\n\n週報の記録を追加します。\n\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})" \
+            --label weekly-report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
