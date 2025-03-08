@@ -73,6 +73,6 @@ jobs:
           echo "\`\`\`" >> review.txt
           
           # レビューを送信
-          gh pr review ${{ steps.create-pr.outputs.pr_number }} --request-changes --body-file review.txt
+          gh pr review ${{ steps.create-pr.outputs.pr_number }} --comment --body-file review.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
