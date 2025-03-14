@@ -35,7 +35,7 @@ jobs:
       - name: Update RECORD.md
         run: |
           echo "" >> RECORD.md  # 空行を追加
-          echo "[x] ${{ env.DATE }}" >> RECORD.md
+          echo "- [x] ${{ env.DATE }}" >> RECORD.md
 
       - name: Create Pull Request
         id: create-pr
