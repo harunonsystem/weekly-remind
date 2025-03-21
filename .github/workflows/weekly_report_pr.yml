@@ -50,7 +50,7 @@ jobs:
           # PRを作成し、番号を環境変数として出力
           PR_URL=$(gh pr create \
             --title "週報: ${{ env.DATE }}" \
-            --body $'# 今週の週報記録\r\n\r\n週報の記録を追加します。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
+            --body $'# 今週の週報記録\r\n\r\n記入が完了したらmergeしてください。\r\n\r\n[週報を書く](${{ secrets.WEEKLY_PAGE_URL }})' \
             --label weekly-report \
             --reviewer $OWNER)
 
